@@ -1,0 +1,317 @@
+﻿@model CTISINC.JHU.Areas.Patient.Models.systemMaintenance
+
+@{
+    ViewBag.Title = "systemMaintenance";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@{
+    ViewBag.Title = "CRFEntry";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<script type="text/ecmascript">
+    var GetAllPatients = '@Url.Action("PatientListCollected", "Patient")';
+    var GetAllVisits = '@Url.Action("VisitList", "Patient")';
+    var GetCollectionInfo = '@Url.Action("SpecimenCollectionPartial", "Patient")';
+    var GetAllLRFs = '@Url.Action("GetAllLRFs", "Patient")';
+    var GetAllActiveCRFs = '@Url.Action("GetAllActiveCRFs", "Patient")';
+    var GetAllSpecimens = '@Url.Action("GetAllSpecimens", "Patient")';
+</script>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div>
+                <div>@Html.Raw(ViewBag.Message)</div>
+                <div id="errormsg"></div>
+            </div>
+            <div class="body">
+                <form action="javascript:void();" id="GetCRFForm" name="GetCRFForm">
+                    @Html.HiddenFor(s => s.LRF_ID)
+                    <div class="row clearfix">
+                        <div class="col-sm-1 col-xs-12">
+                            <div class="form-group">
+                                <label for="first">Study</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-12">
+                            <div class="form-group" id="selectCRFStudy">
+                                @if (ViewBag.IsViewDisplayed)
+                                {
+                                    @Html.DropDownListFor(s => s.study_Id, (List<SelectListItem>)ViewBag.studyList, "Select Study", new { @class = "form-control show-tick", @required = "required", @oninvalid = "this.setCustomValidity('Please Select Study')", @onchange = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(s => s.study_Id)
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(s => s.study_Id, (List<SelectListItem>)ViewBag.studyList, "Select Study", new { @class = "form-control show-tick", @disabled = "disabled", @required = "required", @oninvalid = "this.setCustomValidity('Please Select Study')", @onchange = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(s => s.study_Id)
+                                }
+                            </div>
+                        </div>
+                        <div class="col-sm-1 col-xs-12">
+                            <div class="form-group">
+                                <label for="first">Visit</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    @if (ViewBag.IsViewDisplayed)
+                                    {
+                                        @Html.DropDownListFor(model => model.visitId, new List<SelectListItem>(), "Select Visit", new { @id = "Visit_ID", @class = "form-control show-tick", @required = "required", @oninvalid = "this.setCustomValidity('Please Select Visit')", @onchange = "setCustomValidity('')" })
+                                        @Html.ValidationMessageFor(model => model.visitId)
+                                        @Html.HiddenFor(s => s.VisitCode)
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(model => model.visitId, new List<SelectListItem>(), "Select Visit", new { @id = "Visit_ID", @class = "form-control show-tick", @disabled = "disabled", @required = "required", @oninvalid = "this.setCustomValidity('Please Select Visit')", @onchange = "setCustomValidity('')" })
+                                        @Html.ValidationMessageFor(model => model.visitId)
+                                        @Html.HiddenFor(s => s.VisitCode)
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1 col-xs-12">
+                            <div class="form-group">
+                                <label for="first">PID Number</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    @if (ViewBag.IsViewDisplayed)
+                                    {
+                                        @Html.TextBoxFor(model => model.PID_NO, new { @class = "form-control txtPIdNo", @required = "required", @oninvalid = "this.setCustomValidity('Please Select PID Number')", @oninput = "setCustomValidity('')" })
+                                        @Html.ValidationMessageFor(model => model.PID_NO)
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.PID_NO, new { @class = "form-control txtPIdNo", @disabled = "disabled", @required = "required", @oninvalid = "this.setCustomValidity('Please Select PID Number')", @oninput = "setCustomValidity('')" })
+                                        @Html.ValidationMessageFor(model => model.PID_NO)
+                                    }
+                                </div>
+                                @Html.HiddenFor(s => s.PidID)
+                            </div>
+                        </div>
+                        <div class="col-sm-1 col-xs-12">
+                            <div class="form-group">
+                                <label for="first">LRF ID</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-11">
+                            <div class="form-group">
+                                @if (ViewBag.IsViewDisplayed)
+                                {
+                                    @Html.DropDownListFor(s => s.SCL_ID, new List<SelectListItem>(), "Select LRF", new { @class = "form-control show-tick", @required = "required", @oninvalid = "this.setCustomValidity('Please Select LRF')", @onchange = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(s => s.SCL_ID)
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(s => s.SCL_ID, new List<SelectListItem>(), "Select LRF", new { @class = "form-control show-tick", @disabled = "disabled", @required = "required", @oninvalid = "this.setCustomValidity('Please Select LRF')", @onchange = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(s => s.SCL_ID)
+                                }
+                                @Html.HiddenFor(s => s.LRF_ID)
+                            </div>
+                            <a href="@Url.Action("LRF", "Patient", new { Area = "Patient", id = "" })" target="_blank" id="lrfpdf">
+                                <i class="material-icons">launch</i>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="row clearfix">
+                        <div class="col-sm-1 col-xs-12">
+                            <div class="form-group">
+                                <label for="first">Specimen</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-12">
+                            <div class="form-group">
+                                @if (ViewBag.IsViewDisplayed)
+                                {
+                                    @Html.DropDownListFor(s => s.SpecimenType, new List<SelectListItem>(), "Select Specimen", new { @class = "form-control show-tick", @required = "required", @oninvalid = "this.setCustomValidity('Please Select Specimen')", @onchange = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(s => s.SpecimenType)
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(s => s.SpecimenType, new List<SelectListItem>(), "Select Specimen", new { @class = "form-control show-tick", @disabled = "disabled", @required = "required", @oninvalid = "this.setCustomValidity('Please Select Specimen')", @onchange = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(s => s.SpecimenType)
+                                }
+                            </div>
+                        </div>
+                        <div class="col-sm-1 col-xs-12">
+                            <div class="form-group">
+                                <label for="first">Lab Report Name</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-12">
+                            <div class="form-group">
+                                @if (ViewBag.IsViewDisplayed)
+                                {
+                                    @Html.DropDownListFor(s => s.CRF_NAME, new List<SelectListItem>(), "Select Lab Report", new { @class = "form-control show-tick", @required = "required", @oninvalid = "this.setCustomValidity('Please Select CRF Form')", @onchange = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(s => s.CRF_NAME)
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(s => s.CRF_NAME, new List<SelectListItem>(), "Select Lab Report", new { @class = "form-control show-tick", @disabled = "disabled", @required = "required", @oninvalid = "this.setCustomValidity('Please Select CRF Form')", @onchange = "setCustomValidity('')" })
+                                    @Html.ValidationMessageFor(s => s.CRF_NAME)
+                                }
+                            </div>
+                        </div>
+                        @*<div class="col-sm-1 col-xs-12">
+                                <div class="form-group">
+                                    <label for="first">Lab Report Status</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-xs-12">
+                                <div class="form-group">
+                                     @Html.TextBoxFor(s => s.CRF_STATUS, new { @class = "form-check-input" })
+                                     @Html.ValidationMessageFor(s => s.CRF_STATUS)
+                                </div>
+                            </div>*@
+
+                        <div class="col-sm-1 col-xs-12">
+                            <div class="form-group">
+                                <label for="first">Lab Report Status</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-12">
+                            <div class="form-group">
+                                @Html.HiddenFor(s => s.CRF_STATUS)
+                                <label class="CRFStatus"></label>
+
+                                <!-- Add a hidden input to store the checkbox value -->
+                                @Html.HiddenFor(s => s.CRF_STATUS, new { id = "labReportStatusCheckbox" })
+
+                                @Html.TextBoxFor(s => s.CRF_STATUS, new { @class = "CRFStatus", id = "labReportStatusCheckbox" })
+                                @Html.ValidationMessageFor(s => s.CRF_STATUS)
+
+                                <!-- Add a script to handle the checkbox click event and update the hidden input value -->
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#labReportStatusCheckbox').click(function () {
+                                            // Get the checkbox value (true or false)
+                                            var isChecked = $(this).is(":checked");
+
+                                            // Update the hidden input value with the checkbox value
+                                            $('#IsLabReportChecked').val(isChecked);
+
+                                            // Update the text box based on the checkbox value
+                                            var crfStatusTextBox = $('#CRF_STATUS');
+                                            crfStatusTextBox.val(isChecked ? 'Checked Value' : 'Unchecked Value');
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+
+                <div class="row ">
+                    <div class="col-sm-2 pull-left">
+                        <a href="@Url.Content("~/Content/newthemes/Reference%20Ranges.pdf")" target="_blank" id="rangepdn">
+                            Reference Ranges
+                        </a>
+                    </div>
+                    <div class="col-sm-2 pull-right">
+                        @if (ViewBag.IsViewDisplayed)
+                        {
+                            <button type="submit" id="ViewCRF" class="btn btn-raised g-bg-cyan pull-right">Update</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div id="LoadCRF">
+            <iframe id="frame" class="CRFForm" src="" scrolling="yes" style="display:none;height:100%;overflow:visible;"></iframe>
+        </div>
+    </div>
+</div>
+<script>
+    $('#selectCRFStudy').click(function () {
+        $('#selectCRFStudy .dropdown-menu').css('height', '400px');
+    });
+
+    $('#GetCRFForm').submit(function () {
+      if ($("#IS_FOR_JHU").val() == "true") {
+          if ($(".CRFStatus").html() == '@Constants.IN_PROGRESS_CRF_STATUS' || $(".CRFStatus").html() == '@Constants.NOT_STARTED_CRF_STATUS') {
+              var link = '@Url.Action("CallView", "HealthAssessments", new { Area = "HealthAssessments" })';
+              $('.CRFForm').attr('src', link + '?code=' + $('#SHORTCODE').val() + '&isPreviewMode=0&lang=en&RefId=' + $("#PidID").val() + '_' + $('#Visit_ID').val() + '&PTS_ID=' + $("#CRF_NAME").val() + '&status=' + $(".CRFStatus").html());
+              $('.CRFForm').show();
+              $('#frame').css('min-height', '0px');
+              $('#frame').load(function () {
+                  var iFrameID = document.getElementById('frame');
+                  if (iFrameID) {
+                      iFrameID.height = "";
+                      var item = iFrameID.contentWindow.document.body.scrollHeight - 30 + "px";
+                      $('#frame').css('min-height', item);
+                  }
+              });
+
+
+
+              @*var link = '@Url.Action("SurveyConfirmation", "Participants", new { Area = "" })';
+          $('.CRFForm').attr('src', link + '?HAA_ID=' + $('#HAA_ID_For_CRF').val() + '&RefId=' + $("#PidID").val() + '_' + $('#Visit_ID').val());
+          $('.CRFForm').show();
+          $('#frame').css('min-height', '0px');
+          $('#frame').load(function () {
+              var iFrameID = document.getElementById('frame');
+              if (iFrameID) {
+                  iFrameID.height = "";
+                  var item = iFrameID.contentWindow.document.body.scrollHeight + "px";
+                  $('#frame').css('min-height', item);
+              }
+          });*@
+          }
+          else if ($('#IS_TRANSPORTED').val() == "true" || $(".CRFStatus").html() == '@Constants.REVIEWED_CRF_STATUS' || $(".CRFStatus").html() == '@Constants.QC_REVIEWED_CRF_STATUS') {
+              var link = '@Url.Action("CallView", "HealthAssessments", new { Area = "HealthAssessments" })';
+              $('.CRFForm').attr('src', link + '?code=' + $('#SHORTCODE').val() + '&isPreviewMode=0&lang=en&RefId=' + $("#PidID").val() + '_' + $('#Visit_ID').val() + '&PTS_ID=' + $("#CRF_NAME").val() + '&status=' + $(".CRFStatus").html() + '&IsForPreview=1&IsReviewed=1');
+              $('.CRFForm').show();
+              $('#frame').css('min-height', '0px');
+              $('#frame').load(function () {
+                  var iFrameID = document.getElementById('frame');
+                  if (iFrameID) {
+                      iFrameID.height = "";
+                      var item = iFrameID.contentWindow.document.body.scrollHeight - 30 + "px";
+                      $('#frame').css('min-height', item);
+                  }
+              });
+          }
+          else {
+              var link = '@Url.Action("CallView", "HealthAssessments", new { Area = "HealthAssessments" })';
+              $('.CRFForm').attr('src', link + '?code=' + $('#SHORTCODE').val() + '&isPreviewMode=0&lang=en&RefId=' + $("#PidID").val() + '_' + $('#Visit_ID').val() + '&PTS_ID=' + $("#CRF_NAME").val() + '&status=' + $(".CRFStatus").html() + '&IsForPreview=1');
+              $('.CRFForm').show();
+              $('#frame').css('min-height', '0px');
+              $('#frame').load(function () {
+                  var iFrameID = document.getElementById('frame');
+                  if (iFrameID) {
+                      iFrameID.height = "";
+                      var item = iFrameID.contentWindow.document.body.scrollHeight - 30 + "px";
+                      $('#frame').css('min-height', item);
+                  }
+              });
+          }
+      }
+      else {
+          alert("This Lab Report has Third Party Integration, Sytem cannot Populates Data.");
+      }
+  });
+
+    //$.ajax({
+    //    url: link + '?code=' + $('#SHORTCODE').val() + '&isPreviewMode=0&lang=en&RefId=' + $("#PidID").val() + '_' + $('#Visit_ID').val(),
+    //    type: 'GET',
+    //    success: function (partialView) {
+    //        console.log(partialView);
+    //        $('#LoadCRF').html(partialView);
+    //    }
+    //});
+</script>
+<script type="text/javascript" src="@Url.Content("~/Areas/Patient/Script/CRFEntry.js?v=0.02")"></script>
+
+
